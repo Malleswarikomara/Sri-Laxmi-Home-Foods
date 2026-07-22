@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Explore homemade food images from Sri Laxmi Home Foods in Hyderabad."
+    >
+
+    <title>Food Gallery | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/gallery.css?v=1">
+    <link rel="stylesheet" href="css/footer.css?v=2">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation menu"
+            >
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="about.html">
+                        About
+                    </a>
+                </li>
+
+                <li>
+                    <a href="menu.html">
+                        Menu
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="gallery.html"
+                        class="active"
+                    >
+                        Gallery
+                    </a>
+                </li>
+
+                <li>
+                    <a href="contact.html">
+                        Contact
+                    </a>
+                </li>
+
+                <li id="authNav">
+                    <a href="login.html">
+                        Login
+                    </a>
+                </li>
+
+                <li>
+                    <a href="cart.html" class="cart-link">
+                        🛒 Cart
+                        <span id="cartCount">0</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <!-- Gallery Hero -->
+        <section class="gallery-hero">
+
+            <div class="gallery-hero-content">
+
+                <p>OUR FOOD COLLECTION</p>
+
+                <h1>
+                    Delicious Moments From
+                    <span>Our Kitchen</span>
+                </h1>
+
+                <p class="gallery-hero-description">
+                    Explore fresh homemade meals, breakfast items,
+                    snacks, sweets, pickles and special dishes prepared
+                    with care.
+                </p>
+
+                <a href="menu.html">
+                    Explore Full Menu
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- Gallery -->
+        <section class="gallery-section">
+
+            <div class="gallery-heading">
+
+                <p>FRESHLY PREPARED</p>
+
+                <h2>Our Food Gallery</h2>
+
+                <span>
+                    Select a category or search for your favourite food.
+                </span>
+
+            </div>
+
+            <!-- Search -->
+            <div class="gallery-search-box">
+
+                <input
+                    type="search"
+                    id="gallerySearch"
+                    placeholder="Search food name or category..."
+                    aria-label="Search gallery"
+                >
+
+                <button
+                    type="button"
+                    id="gallerySearchButton"
+                >
+                    Search
+                </button>
+
+            </div>
+
+            <!-- Category buttons -->
+            <div class="gallery-filter-buttons">
+
+                <button
+                    type="button"
+                    class="gallery-filter-button active"
+                    data-category="All"
+                >
+                    All
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Breakfast"
+                >
+                    Breakfast
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Lunch"
+                >
+                    Lunch
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Dinner"
+                >
+                    Dinner
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Snacks"
+                >
+                    Snacks
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Sweets"
+                >
+                    Sweets
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Pickles"
+                >
+                    Pickles
+                </button>
+
+                <button
+                    type="button"
+                    class="gallery-filter-button"
+                    data-category="Drinks"
+                >
+                    Drinks
+                </button>
+
+            </div>
+
+            <!-- Loading message -->
+            <div
+                id="galleryMessage"
+                class="gallery-message"
+            >
+                Loading food gallery...
+            </div>
+
+            <!-- Food images inserted by gallery.js -->
+            <div
+                id="galleryContainer"
+                class="gallery-container"
+            ></div>
+
+        </section>
+
+        <!-- CTA -->
+        <section class="gallery-cta-section">
+
+            <div class="gallery-cta-content">
+
+                <div>
+
+                    <p>FEELING HUNGRY?</p>
+
+                    <h2>
+                        Order Your Favourite Homemade Food
+                    </h2>
+
+                    <span>
+                        Browse our menu and place your order in a few
+                        simple steps.
+                    </span>
+
+                </div>
+
+                <a href="menu.html">
+                    Order Now
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Image preview modal -->
+    <div
+        id="galleryModal"
+        class="gallery-modal"
+        aria-hidden="true"
+    >
+
+        <button
+            type="button"
+            id="galleryModalClose"
+            class="gallery-modal-close"
+            aria-label="Close image preview"
+        >
+            ×
+        </button>
+
+        <div class="gallery-modal-content">
+
+            <img
+                id="galleryModalImage"
+                src="images/food-placeholder.jpg"
+                alt="Food preview"
+            >
+
+            <div class="gallery-modal-details">
+
+                <span id="galleryModalCategory">
+                    Homemade Food
+                </span>
+
+                <h2 id="galleryModalName">
+                    Food Name
+                </h2>
+
+                <p id="galleryModalDescription">
+                    Fresh homemade food prepared with care.
+                </p>
+
+                <strong id="galleryModalPrice">
+                    ₹0
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <div class="footer-logo-section">
+
+                    <img
+                        src="images/logo.png"
+                        alt="Sri Laxmi Home Foods Logo"
+                    >
+
+                    <div>
+                        <h2>Sri Laxmi</h2>
+                        <span>Home Foods</span>
+                    </div>
+
+                </div>
+
+                <p>
+                    Fresh homemade food prepared with love and
+                    delivered across Hyderabad.
+                </p>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Quick Links</h3>
+
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="menu.html">Menu</a>
+                <a href="gallery.html">Gallery</a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Customer</h3>
+
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+                <a href="cart.html">Cart</a>
+                <a href="myorders.html">My Orders</a>
+
+            </div>
+
+            <div class="footer-column">
+
+                <h3>Contact</h3>
+
+                <p>📍 Hyderabad, Telangana</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ srilaxmihomefoods@gmail.com</p>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Sri Laxmi Home Foods. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script src="js/gallery.js?v=2"></script>
+
+</body>
+
+</html>

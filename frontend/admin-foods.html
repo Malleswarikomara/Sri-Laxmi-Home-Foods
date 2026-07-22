@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Admin food management page for Sri Laxmi Home Foods."
+    >
+
+    <title>Manage Foods | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <ul class="nav-links">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="menu.html">
+                        Menu
+                    </a>
+                </li>
+
+                <li>
+                    <a href="admin-orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="admin-foods.html"
+                        class="active"
+                    >
+                        Manage Foods
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        Profile
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-foods-page">
+
+        <!-- Page Heading -->
+        <div class="admin-foods-heading">
+
+            <p>ADMIN PANEL</p>
+
+            <h1>Food Management</h1>
+
+            <span>
+                Add, edit, upload images and manage menu items.
+            </span>
+
+        </div>
+
+        <!-- Add / Edit Food Form -->
+        <section class="admin-food-form-section">
+
+            <h2 id="foodFormTitle">
+                Add New Food
+            </h2>
+
+            <form id="adminFoodForm">
+
+                <!-- Food ID used while editing -->
+                <input
+                    type="hidden"
+                    id="foodId"
+                >
+
+                <div class="admin-form-grid">
+
+                    <!-- Food Name -->
+                    <div class="admin-form-group">
+
+                        <label for="foodName">
+                            Food Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="foodName"
+                            placeholder="Example: Masala Dosa"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+                    <!-- Category -->
+                    <div class="admin-form-group">
+
+                        <label for="foodCategory">
+                            Category
+                        </label>
+
+                        <select
+                            id="foodCategory"
+                            required
+                        >
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="Breakfast">
+                                Breakfast
+                            </option>
+
+                            <option value="Lunch">
+                                Lunch
+                            </option>
+
+                            <option value="Dinner">
+                                Dinner
+                            </option>
+
+                            <option value="Snacks">
+                                Snacks
+                            </option>
+
+                            <option value="Sweets">
+                                Sweets
+                            </option>
+
+                            <option value="Pickles">
+                                Pickles
+                            </option>
+
+                            <option value="Drinks">
+                                Drinks
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Price -->
+                    <div class="admin-form-group">
+
+                        <label for="foodPrice">
+                            Price
+                        </label>
+
+                        <input
+                            type="number"
+                            id="foodPrice"
+                            min="1"
+                            step="1"
+                            placeholder="Example: 120"
+                            required
+                        >
+
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="admin-form-group">
+
+                        <label for="foodImageFile">
+                            Food Image
+                        </label>
+
+                        <input
+                            type="file"
+                            id="foodImageFile"
+                            accept="image/jpeg,image/png,image/webp"
+                        >
+
+                        <!-- Uploaded image URL will be stored here -->
+                        <input
+                            type="hidden"
+                            id="foodImage"
+                        >
+
+                        <p
+                            id="imageUploadMessage"
+                            aria-live="polite"
+                        ></p>
+
+                        <img
+                            id="foodImagePreview"
+                            src="images/food-placeholder.jpg"
+                            alt="Food image preview"
+                            style="
+                                width: 150px;
+                                height: 110px;
+                                display: block;
+                                margin-top: 12px;
+                                object-fit: cover;
+                                border: 1px solid #dddddd;
+                                border-radius: 10px;
+                            "
+                        >
+
+                    </div>
+
+                </div>
+
+                <!-- Description -->
+                <div class="admin-form-group">
+
+                    <label for="foodDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="foodDescription"
+                        rows="5"
+                        placeholder="Enter food description"
+                    ></textarea>
+
+                </div>
+
+                <!-- Availability -->
+                <label class="admin-availability-field">
+
+                    <input
+                        type="checkbox"
+                        id="foodAvailable"
+                        checked
+                    >
+
+                    <span>
+                        Available for ordering
+                    </span>
+
+                </label>
+
+                <!-- Buttons -->
+                <div class="admin-food-form-buttons">
+
+                    <button
+                        type="submit"
+                        id="foodSubmitButton"
+                    >
+                        Add Food
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelEditButton"
+                        class="cancel-edit-button"
+                    >
+                        Cancel Edit
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- Food Items List -->
+        <section class="admin-food-list-section">
+
+            <div class="admin-food-list-heading">
+
+                <h2>
+                    Menu Items
+                </h2>
+
+                <strong id="adminFoodCount">
+                    0 items
+                </strong>
+
+            </div>
+
+            <div
+                id="adminFoodMessage"
+                class="admin-message"
+            >
+                Loading food items...
+            </div>
+
+            <div
+                id="adminFoodsContainer"
+                class="admin-foods-container"
+            ></div>
+
+        </section>
+
+    </main>
+
+    <!-- Only one JavaScript file -->
+    <script src="js/admin-foods.js?v=9"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/checkout.css?v=1">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+            >
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="menu.html">Menu</a>
+                </li>
+
+                <li>
+                    <a href="cart.html">Cart</a>
+                </li>
+
+                <li>
+                    <a href="profile.html">Profile</a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <main class="checkout-page">
+
+        <section class="checkout-container">
+
+            <div class="checkout-heading">
+
+                <p>SECURE CHECKOUT</p>
+
+                <h1>Delivery Details</h1>
+
+                <span>
+                    Currently delivering only within Hyderabad.
+                </span>
+
+            </div>
+
+            <form id="checkoutForm" novalidate>
+
+                <div
+                    id="checkoutMessage"
+                    class="checkout-message"
+                ></div>
+
+                <div class="checkout-form-grid">
+
+                    <div class="checkout-field full-width">
+
+                        <label for="name">
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            minlength="2"
+                            maxlength="60"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="phone">
+                            Mobile Number *
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="10-digit mobile number"
+                            autocomplete="tel"
+                            inputmode="numeric"
+                            maxlength="13"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="email">
+                            Email Address *
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="house">
+                            House / Flat Number *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="house"
+                            placeholder="House or flat number"
+                            maxlength="80"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="street">
+                            Street / Road *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="street"
+                            placeholder="Street or road name"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="area">
+                            Area / Locality *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="area"
+                            placeholder="Example: Kukatpally"
+                            maxlength="80"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="landmark">
+                            Landmark
+                        </label>
+
+                        <input
+                            type="text"
+                            id="landmark"
+                            placeholder="Nearby landmark"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="city">
+                            City *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            value="Hyderabad"
+                            readonly
+                            required
+                        >
+
+                    </div>
+
+                    <div class="checkout-field">
+
+                        <label for="pincode">
+                            Hyderabad Pincode *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="pincode"
+                            placeholder="Example: 500072"
+                            inputmode="numeric"
+                            maxlength="6"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="locationBtn"
+                    class="location-button"
+                >
+                    📍 Get Current Location
+                </button>
+
+                <p
+                    id="locationStatus"
+                    class="location-status"
+                >
+                    Location permission is optional.
+                </p>
+
+                <section class="payment-section">
+
+                    <h3>Select Payment Method</h3>
+
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="COD"
+                            checked
+                        >
+
+                        <span>
+                            Cash on Delivery
+                        </span>
+
+                    </label>
+
+                    <label class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="ONLINE"
+                        >
+
+                        <span>
+                            Online Payment
+                        </span>
+
+                    </label>
+
+                </section>
+
+                <button
+                    type="submit"
+                    id="placeOrderButton"
+                    class="place-order-button"
+                >
+                    Place Order
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="js/location.js?v=3"></script>
+    <script src="js/checkout.js?v=5"></script>
+
+</body>
+
+</html>

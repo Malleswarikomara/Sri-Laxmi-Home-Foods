@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Order Confirmed | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="order-success-container">
+
+        <div class="order-success-card">
+
+            <div class="success-icon">✅</div>
+
+            <h1>Order Confirmed!</h1>
+
+            <p>
+                Thank you for ordering from Sri Laxmi Home Foods.
+            </p>
+
+            <div id="orderDetails"></div>
+
+            <a href="index.html" class="home-primary-button">
+                Return to Home
+            </a>
+
+        </div>
+
+    </main>
+
+    <script>
+        const order = JSON.parse(
+            localStorage.getItem("lastOrder") || "null"
+        );
+
+        const orderDetails =
+            document.getElementById("orderDetails");
+
+        if (order) {
+            orderDetails.innerHTML = `
+                <p>
+                    <strong>Order ID:</strong>
+                    ${order._id}
+                </p>
+
+                <p>
+                    <strong>Total Amount:</strong>
+                    ₹${order.totalAmount}
+                </p>
+
+                <p>
+                    <strong>Payment:</strong>
+                    ${order.paymentMethod}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${order.orderStatus}
+                </p>
+            `;
+        }
+    </script>
+
+</body>
+
+</html>

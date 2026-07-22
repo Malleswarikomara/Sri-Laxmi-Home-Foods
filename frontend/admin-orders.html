@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Orders | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="admin-orders-page">
+
+        <div class="admin-orders-heading">
+            <p>ADMIN PANEL</p>
+            <h1>Order Management</h1>
+            <span>
+                View customer orders and update delivery status.
+            </span>
+        </div>
+
+        <div class="admin-summary">
+            <div class="admin-summary-card">
+                <span>Total Orders</span>
+                <strong id="totalOrders">0</strong>
+            </div>
+
+            <div class="admin-summary-card">
+                <span>Pending Orders</span>
+                <strong id="pendingOrders">0</strong>
+            </div>
+
+            <div class="admin-summary-card">
+                <span>Delivered Orders</span>
+                <strong id="deliveredOrders">0</strong>
+            </div>
+        </div>
+
+        <div id="adminMessage" class="admin-message">
+            Loading orders...
+        </div>
+
+        <div
+            id="adminOrdersContainer"
+            class="admin-orders-container"
+        ></div>
+
+    </main>
+
+    <script src="js/admin-orders.js?v=6"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Contact Messages | Sri Laxmi Home Foods
+    </title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+
+    <link
+        rel="stylesheet"
+        href="css/admin-contacts.css?v=1"
+    >
+
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+            >
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="admin-orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="admin-foods.html">
+                        Manage Foods
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="admin-contacts.html"
+                        class="active"
+                    >
+                        Messages
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        Profile
+                    </a>
+                </li>
+
+                <li>
+                    <button
+                        type="button"
+                        id="adminLogoutButton"
+                        class="admin-contact-logout"
+                    >
+                        Logout
+                    </button>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <main class="admin-contacts-page">
+
+        <!-- Heading -->
+        <section class="admin-contacts-heading">
+
+            <p>ADMIN PANEL</p>
+
+            <h1>Customer Messages</h1>
+
+            <span>
+                View customer enquiries, feedback and complaints.
+            </span>
+
+        </section>
+
+        <!-- Summary -->
+        <section class="contact-summary">
+
+            <article class="contact-summary-card">
+
+                <span>Total Messages</span>
+
+                <strong id="totalContactCount">
+                    0
+                </strong>
+
+            </article>
+
+            <article class="contact-summary-card">
+
+                <span>New Messages</span>
+
+                <strong id="newContactCount">
+                    0
+                </strong>
+
+            </article>
+
+            <article class="contact-summary-card">
+
+                <span>Replied Messages</span>
+
+                <strong id="repliedContactCount">
+                    0
+                </strong>
+
+            </article>
+
+        </section>
+
+        <!-- Filter -->
+        <section class="contact-filter-section">
+
+            <label for="contactStatusFilter">
+                Filter by Status
+            </label>
+
+            <select id="contactStatusFilter">
+
+                <option value="All">
+                    All Messages
+                </option>
+
+                <option value="New">
+                    New
+                </option>
+
+                <option value="Read">
+                    Read
+                </option>
+
+                <option value="Replied">
+                    Replied
+                </option>
+
+            </select>
+
+        </section>
+
+        <!-- Message -->
+        <div
+            id="adminContactMessage"
+            class="admin-contact-message"
+        >
+            Loading customer messages...
+        </div>
+
+        <!-- Contacts inserted by JavaScript -->
+        <section
+            id="adminContactsContainer"
+            class="admin-contacts-container"
+        ></section>
+
+    </main>
+
+    <script src="js/admin-contacts.js?v=1"></script>
+
+</body>
+
+</html>

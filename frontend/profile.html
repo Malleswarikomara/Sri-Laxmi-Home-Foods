@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile | Sri Laxmi Home Foods</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/profile.css?v=1">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a href="index.html" class="brand">
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation menu"
+            >
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="menu.html">Menu</a>
+                </li>
+
+                <li>
+                    <a href="myorders.html">My Orders</a>
+                </li>
+
+                <li>
+                    <a href="profile.html" class="active">
+                        Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a href="cart.html">
+                        Cart
+                        <span id="cartCount">0</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <!-- Profile page -->
+    <main class="profile-page">
+
+        <section class="profile-container">
+
+            <div class="profile-heading">
+
+                <p>MY ACCOUNT</p>
+
+                <h1>Profile</h1>
+
+                <span>
+                    View your account details and manage your activities.
+                </span>
+
+            </div>
+
+            <article class="profile-card">
+
+                <div class="profile-avatar">
+                    <span id="profileInitial">U</span>
+                </div>
+
+                <div class="profile-main-details">
+
+                    <h2 id="profileName">
+                        Loading...
+                    </h2>
+
+                    <p id="profileEmail">
+                        Loading...
+                    </p>
+
+                    <span
+                        id="profileRole"
+                        class="profile-role"
+                    >
+                        Customer
+                    </span>
+
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-info-row">
+
+                        <span>Full Name</span>
+
+                        <strong id="profileNameDetail">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                    <div class="profile-info-row">
+
+                        <span>Email Address</span>
+
+                        <strong id="profileEmailDetail">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                    <div class="profile-info-row">
+
+                        <span>Account Type</span>
+
+                        <strong id="profileRoleDetail">
+                            Customer
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- Customer actions -->
+                <div
+                    id="customerActions"
+                    class="profile-actions"
+                >
+
+                    <a
+                        href="myorders.html"
+                        class="profile-action-button primary-action"
+                    >
+                        📦 View My Orders
+                    </a>
+
+                    <a
+                        href="menu.html"
+                        class="profile-action-button secondary-action"
+                    >
+                        🍲 Order Food
+                    </a>
+
+                </div>
+
+                <!-- Admin actions -->
+                <div
+                    id="adminActions"
+                    class="profile-admin-section"
+                >
+
+                    <h3>Admin Management</h3>
+
+                    <div class="profile-actions">
+
+                        <a
+                            href="admin-orders.html"
+                            class="profile-action-button primary-action"
+                        >
+                            📋 Manage Orders
+                        </a>
+
+                        <a
+                            href="admin-foods.html"
+                            class="profile-action-button secondary-action"
+                        >
+                            🍲 Manage Foods
+                        </a>
+
+                        <a
+                            href="admin-contacts.html"
+                            class="profile-action-button secondary-action"
+                        >
+                            💬 Customer Messages
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="logoutButton"
+                    class="profile-logout-button"
+                >
+                    Logout
+                </button>
+
+            </article>
+
+        </section>
+
+    </main>
+
+    <script src="js/profile.js?v=2"></script>
+
+</body>
+
+</html>
