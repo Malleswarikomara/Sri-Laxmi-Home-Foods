@@ -1,4 +1,4 @@
-const Order = require("../models/Order");
+const Order = require("../models/order");
 const Food = require("../models/Food");
 const mongoose = require("mongoose");
 // Customer: Place new order
