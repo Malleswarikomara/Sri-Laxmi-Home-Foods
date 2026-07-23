@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Contact = require("../models/Contact");
+const Contact = require("../models/ContactModel");
 
 /* =========================================
    CREATE CONTACT MESSAGE
