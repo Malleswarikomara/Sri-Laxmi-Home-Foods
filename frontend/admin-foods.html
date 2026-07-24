@@ -24,65 +24,73 @@
 <body>
 
     <!-- Navbar -->
-    <header class="site-header">
+    
+   <header class="site-header">
 
-        <nav class="navbar">
+    <nav class="navbar">
 
-            <a href="index.html" class="brand">
+        <a href="index.html" class="brand">
 
-                <img
-                    src="images/logo.png"
-                    alt="Sri Laxmi Home Foods Logo"
-                    class="brand-logo"
+            <img
+                src="images/logo.png"
+                alt="Sri Laxmi Home Foods Logo"
+                class="brand-logo"
+            >
+
+            <div class="brand-text">
+                <h2>Sri Laxmi</h2>
+                <span>Home Foods</span>
+            </div>
+
+        </a>
+
+        <button
+            type="button"
+            class="menu-toggle"
+            id="menuToggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+        <ul
+            class="nav-links"
+            id="navLinks"
+        >
+
+            <li>
+                <a href="admin-orders.html">
+                    Admin Orders
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="admin-foods.html"
+                    class="active"
                 >
+                    Manage Foods
+                </a>
+            </li>
 
-                <div class="brand-text">
-                    <h2>Sri Laxmi</h2>
-                    <span>Home Foods</span>
-                </div>
+            <li>
+                <a href="admin-contacts.html">
+                    Customer Messages
+                </a>
+            </li>
 
-            </a>
+            <li>
+                <a href="profile.html">
+                    Profile
+                </a>
+            </li>
 
-            <ul class="nav-links">
+        </ul>
 
-                <li>
-                    <a href="index.html">
-                        Home
-                    </a>
-                </li>
+    </nav>
 
-                <li>
-                    <a href="menu.html">
-                        Menu
-                    </a>
-                </li>
-
-                <li>
-                    <a href="admin-orders.html">
-                        Orders
-                    </a>
-                </li>
-
-                <li>
-                    <a
-                        href="admin-foods.html"
-                        class="active"
-                    >
-                        Manage Foods
-                    </a>
-                </li>
-
-                <li>
-                    <a href="profile.html">
-                        Profile
-                    </a>
-                </li>
-
-            </ul>
-
-        </nav>
-
-    </header>
+</header>
 
     <!-- Main Content -->
     <main class="admin-foods-page">
@@ -329,7 +337,8 @@
     </main>
 
     <!-- Only one JavaScript file -->
-    <script src="js/admin-foods.js?v=9"></script>
+    <script src="js/admin-foods.js?v=10"></script>
+    <script src="js/navbar.js?v=5"></script>
 
 </body>
 
