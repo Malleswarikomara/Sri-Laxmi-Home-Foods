@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
@@ -28,31 +27,96 @@ function generateLoginToken(user) {
     );
 }
 
-function createEmailTransporter() {
-    const emailUser =
-        String(
-            process.env.EMAIL_USER || ""
-        ).trim();
+/* =========================================
+   SEND EMAIL USING BREVO API
+========================================= */
 
-    const emailPassword =
-        String(
-            process.env.EMAIL_PASS || ""
-        ).replace(/\s/g, "");
+async function sendBrevoEmail({
+    toEmail,
+    toName,
+    subject,
+    textContent,
+    htmlContent
+}) {
+    const apiKey = String(
+        process.env.BREVO_API_KEY || ""
+    ).trim();
 
-    if (!emailUser || !emailPassword) {
+    const senderEmail = String(
+        process.env.BREVO_SENDER_EMAIL || ""
+    ).trim();
+
+    const senderName = String(
+        process.env.BREVO_SENDER_NAME ||
+        "Sri Laxmi Home Foods"
+    ).trim();
+
+    if (!apiKey) {
         throw new Error(
-            "Gmail email or App Password is missing in Render Environment Variables."
+            "BREVO_API_KEY is missing in Render Environment Variables."
         );
     }
 
-    return nodemailer.createTransport({
-        service: "gmail",
+    if (!senderEmail) {
+        throw new Error(
+            "BREVO_SENDER_EMAIL is missing in Render Environment Variables."
+        );
+    }
 
-        auth: {
-            user: emailUser,
-            pass: emailPassword
+    const response = await fetch(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+            method: "POST",
+
+            headers: {
+                accept: "application/json",
+                "api-key": apiKey,
+                "content-type": "application/json"
+            },
+
+            body: JSON.stringify({
+                sender: {
+                    name: senderName,
+                    email: senderEmail
+                },
+
+                to: [
+                    {
+                        email: toEmail,
+                        name: toName || "Customer"
+                    }
+                ],
+
+                subject,
+                textContent,
+                htmlContent
+            })
         }
-    });
+    );
+
+    const responseText = await response.text();
+
+    let responseData = {};
+
+    try {
+        responseData = responseText
+            ? JSON.parse(responseText)
+            : {};
+    } catch (error) {
+        responseData = {};
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            `Brevo API error ${response.status}: ${
+                responseData.message ||
+                responseText ||
+                "Unknown email error"
+            }`
+        );
+    }
+
+    return responseData;
 }
 
 /* =========================================
@@ -88,8 +152,7 @@ const registerUser = async (req, res) => {
             normalizeEmail(email);
 
         const cleanPhone =
-            String(phone)
-                .replace(/\D/g, "");
+            String(phone).replace(/\D/g, "");
 
         if (cleanName.length < 2) {
             return res.status(400).json({
@@ -278,7 +341,9 @@ const loginUser = async (req, res) => {
 const forgotPassword = async (req, res) => {
     try {
         const email =
-            normalizeEmail(req.body.email);
+            normalizeEmail(
+                req.body?.email
+            );
 
         if (!email) {
             return res.status(400).json({
@@ -292,11 +357,10 @@ const forgotPassword = async (req, res) => {
             await User.findOne({ email });
 
         /*
-           Same response user exist aina,
-           exist kakapoyina return chestham.
-           Dini valla account information
-           public ga reveal avvadu.
+            User account exists aina,
+            exist kakapoyina same message return chestham.
         */
+
         const safeResponseMessage =
             "If an account exists with this email, a password reset link will be sent.";
 
@@ -309,17 +373,18 @@ const forgotPassword = async (req, res) => {
         }
 
         /*
-           Raw reset token email link lo untundi.
+            Raw reset token email link lo untundi.
         */
+
         const resetToken =
             crypto
                 .randomBytes(32)
                 .toString("hex");
 
         /*
-           Database lo raw token store cheyyakunda
-           hashed token store chestham.
+            Database lo hashed token store chestham.
         */
+
         const hashedResetToken =
             crypto
                 .createHash("sha256")
@@ -330,8 +395,9 @@ const forgotPassword = async (req, res) => {
             hashedResetToken;
 
         /*
-           Reset link 15 minutes valid.
+            Reset link 15 minutes valid.
         */
+
         user.resetPasswordExpire =
             Date.now() +
             15 * 60 * 1000;
@@ -348,21 +414,19 @@ const forgotPassword = async (req, res) => {
             `${frontendURL}/reset-password.html?token=${resetToken}`;
 
         try {
-            const transporter =
-                createEmailTransporter();
+            await sendBrevoEmail({
+                toEmail:
+                    user.email,
 
-            await transporter.sendMail({
-                from:
-                    process.env.EMAIL_FROM ||
-                    `"Sri Laxmi Home Foods" <${process.env.EMAIL_USER}>`,
-
-                to: user.email,
+                toName:
+                    user.name ||
+                    "Customer",
 
                 subject:
                     "Reset Your Sri Laxmi Home Foods Password",
 
-                text:
-                    `Hello ${user.name},
+                textContent:
+                    `Hello ${user.name || "Customer"},
 
 We received a request to reset your password.
 
@@ -376,40 +440,46 @@ If you did not request a password reset, you can ignore this email.
 
 Sri Laxmi Home Foods`,
 
-                html: `
+                htmlContent: `
                     <div style="
                         max-width: 600px;
-                        margin: auto;
-                        padding: 25px;
+                        margin: 20px auto;
+                        padding: 30px;
                         font-family: Arial, sans-serif;
                         color: #333333;
                         border: 1px solid #eeeeee;
                         border-radius: 12px;
+                        background-color: #ffffff;
                     ">
                         <h2 style="
                             color: #8b0000;
                             text-align: center;
+                            margin-bottom: 25px;
                         ">
                             Sri Laxmi Home Foods
                         </h2>
 
                         <p>
-                            Hello ${user.name},
+                            Hello ${user.name || "Customer"},
                         </p>
 
                         <p>
                             We received a request to reset
-                            your account password.
+                            your Sri Laxmi Home Foods
+                            account password.
                         </p>
 
-                        <p style="text-align: center;">
+                        <p style="
+                            text-align: center;
+                            margin: 30px 0;
+                        ">
                             <a
                                 href="${resetURL}"
                                 style="
                                     display: inline-block;
-                                    padding: 13px 24px;
+                                    padding: 14px 26px;
                                     color: #ffffff;
-                                    background: #8b0000;
+                                    background-color: #8b0000;
                                     border-radius: 8px;
                                     text-decoration: none;
                                     font-weight: bold;
@@ -420,17 +490,37 @@ Sri Laxmi Home Foods`,
                         </p>
 
                         <p>
-                            This reset link is valid for
+                            This password reset link is
+                            valid for
                             <strong>15 minutes</strong>.
                         </p>
 
                         <p>
-                            If you did not request this,
-                            you can safely ignore this email.
+                            If you did not request this
+                            password reset, you can safely
+                            ignore this email.
+                        </p>
+
+                        <hr style="
+                            border: none;
+                            border-top: 1px solid #eeeeee;
+                            margin: 25px 0;
+                        ">
+
+                        <p style="
+                            text-align: center;
+                            font-size: 13px;
+                            color: #777777;
+                        ">
+                            Sri Laxmi Home Foods
                         </p>
                     </div>
                 `
             });
+
+            console.log(
+                `Password reset email sent to ${user.email}`
+            );
 
             return res.status(200).json({
                 success: true,
