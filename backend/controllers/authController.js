@@ -29,22 +29,28 @@ function generateLoginToken(user) {
 }
 
 function createEmailTransporter() {
-    const emailPort =
-        Number(process.env.EMAIL_PORT || 587);
+    const emailUser =
+        String(
+            process.env.EMAIL_USER || ""
+        ).trim();
 
-    const secureConnection =
-        process.env.EMAIL_SECURE
-            ? process.env.EMAIL_SECURE === "true"
-            : emailPort === 465;
+    const emailPassword =
+        String(
+            process.env.EMAIL_PASS || ""
+        ).replace(/\s/g, "");
+
+    if (!emailUser || !emailPassword) {
+        throw new Error(
+            "Gmail email or App Password is missing in Render Environment Variables."
+        );
+    }
 
     return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: emailPort,
-        secure: secureConnection,
+        service: "gmail",
 
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+            user: emailUser,
+            pass: emailPassword
         }
     });
 }
