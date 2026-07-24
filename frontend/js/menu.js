@@ -1,5 +1,5 @@
 const MENU_API =
-    "http://localhost:5000/api/foods";
+    "https://sri-laxmi-home-foods.onrender.com/api/foods";
 
 const menuContainer =
     document.getElementById("menuContainer");

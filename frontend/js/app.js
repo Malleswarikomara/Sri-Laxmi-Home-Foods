@@ -1,4 +1,4 @@
-const FOOD_API_URL = "http://localhost:5000/api/foods";
+const FOOD_API_URL = "https://sri-laxmi-home-foods.onrender.com/api/foods";
 
 let homeFoods = [];
 
@@ -52,7 +52,7 @@ function getFoodImage(image) {
     }
 
     if (image.startsWith("/uploads")) {
-        return `http://localhost:5000${image}`;
+        return `https://sri-laxmi-home-foods.onrender.com${image}`;
     }
 
     return image;

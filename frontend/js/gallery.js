@@ -1,5 +1,5 @@
 const GALLERY_API_URL =
-    "http://localhost:5000/api/foods";
+    "https://sri-laxmi-home-foods.onrender.com/api/foods";
 
 let galleryFoods = [];
 let selectedGalleryCategory = "All";
@@ -41,21 +41,21 @@ function getGalleryImage(image) {
 
     // /uploads/foods/image.png
     if (imagePath.startsWith("/uploads/")) {
-        return `http://localhost:5000${imagePath}`;
+        return `https://sri-laxmi-home-foods.onrender.com${imagePath}`;
     }
 
     // uploads/foods/image.png
     if (imagePath.startsWith("uploads/")) {
-        return `http://localhost:5000/${imagePath}`;
+        return `https://sri-laxmi-home-foods.onrender.com/${imagePath}`;
     }
 
     // foods/image.png
     if (imagePath.startsWith("foods/")) {
-        return `http://localhost:5000/uploads/${imagePath}`;
+        return `https://sri-laxmi-home-foods.onrender.com/uploads/${imagePath}`;
     }
 
     // Only filename: image.png
-    return `http://localhost:5000/uploads/foods/${imagePath}`;
+    return `https://sri-laxmi-home-foods.onrender.com/uploads/foods/${imagePath}`;
 }
 /* Load foods */
 

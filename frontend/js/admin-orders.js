@@ -1,8 +1,8 @@
 const ADMIN_ORDERS_API =
-    "http://localhost:5000/api/orders/admin/all";
+    "https://sri-laxmi-home-foods.onrender.com/api/orders/admin/all";
 
 const UPDATE_STATUS_API =
-    "http://localhost:5000/api/orders/admin";
+    "https://sri-laxmi-home-foods.onrender.com/api/orders/admin";
 
 const adminOrdersContainer =
     document.getElementById("adminOrdersContainer");

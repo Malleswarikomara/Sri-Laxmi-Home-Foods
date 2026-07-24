@@ -1,8 +1,8 @@
 const MY_ORDERS_API =
-    "http://localhost:5000/api/orders/my-orders";
+    "https://sri-laxmi-home-foods.onrender.com/api/orders/my-orders";
 
 const CANCEL_ORDER_API =
-    "http://localhost:5000/api/orders";
+    "https://sri-laxmi-home-foods.onrender.com/api/orders";
 
 const ordersContainer =
     document.getElementById("ordersContainer");

@@ -1,5 +1,5 @@
 const ORDER_API =
-    "http://localhost:5000/api/orders";
+    "https://sri-laxmi-home-foods.onrender.com/api/orders";
 
 const checkoutForm =
     document.getElementById("checkoutForm");

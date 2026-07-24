@@ -1,5 +1,5 @@
 const CART_FOOD_API =
-    "http://localhost:5000/api/foods";
+    "https://sri-laxmi-home-foods.onrender.com/api/foods";
 
 function getStoredCart() {
     try {

@@ -1,5 +1,5 @@
 const ADMIN_CONTACT_API_URL =
-    "http://localhost:5000/api/contact";
+    "https://sri-laxmi-home-foods.onrender.com/api/contact";
 
 let adminContacts = [];
 

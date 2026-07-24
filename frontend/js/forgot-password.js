@@ -1,5 +1,5 @@
 const FORGOT_PASSWORD_API =
-    "http://localhost:5000/api/auth/forgot-password";
+    "https://sri-laxmi-home-foods.onrender.com/api/auth/forgot-password";
 
 document.addEventListener(
     "DOMContentLoaded",

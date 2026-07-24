@@ -1,8 +1,8 @@
 const FOOD_API =
-    "http://localhost:5000/api/foods";
+    "https://sri-laxmi-home-foods.onrender.com/api/foods";
 
 const FOOD_IMAGE_UPLOAD_API =
-    "http://localhost:5000/api/foods/upload-image";
+    "https://sri-laxmi-home-foods.onrender.com/api/foods/upload-image";
 
 const PLACEHOLDER_IMAGE =
     "images/food-placeholder.jpg";

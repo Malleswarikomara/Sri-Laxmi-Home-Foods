@@ -1,4 +1,4 @@
-const CONTACT_API_URL = "http://localhost:5000/api/contact";
+const CONTACT_API_URL = "https://sri-laxmi-home-foods.onrender.com/api/contact";
 
 document.addEventListener("DOMContentLoaded", () => {
     const contactForm = document.getElementById("contactForm");

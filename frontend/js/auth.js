@@ -1,5 +1,5 @@
 const AUTH_API =
-    "http://localhost:5000/api/auth";
+    "https://sri-laxmi-home-foods.onrender.com/api/auth";
 
 /* -------------------------------
    HELPER FUNCTIONS
