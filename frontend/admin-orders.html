@@ -3,57 +3,199 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Admin Orders | Sri Laxmi Home Foods</title>
+    <meta
+        name="description"
+        content="Admin order management page for Sri Laxmi Home Foods."
+    >
 
-    <link rel="stylesheet" href="css/style.css">
+    <title>
+        Admin Orders | Sri Laxmi Home Foods
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/navbar.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/responsive.css"
+    >
 </head>
 
 <body>
 
+    <!-- =====================================
+         ADMIN NAVBAR
+    ====================================== -->
+
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <a
+                href="index.html"
+                class="brand"
+            >
+
+                <img
+                    src="images/logo.png"
+                    alt="Sri Laxmi Home Foods Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <h2>Sri Laxmi</h2>
+                    <span>Home Foods</span>
+                </div>
+
+            </a>
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+            <ul
+                class="nav-links"
+                id="navLinks"
+            >
+
+                <li>
+                    <a
+                        href="admin-orders.html"
+                        class="active"
+                    >
+                        Admin Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="admin-foods.html">
+                        Manage Foods
+                    </a>
+                </li>
+
+                <li>
+                    <a href="admin-contacts.html">
+                        Customer Messages
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        Profile
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <!-- =====================================
+         ORDER MANAGEMENT
+    ====================================== -->
+
     <main class="admin-orders-page">
 
         <div class="admin-orders-heading">
+
             <p>ADMIN PANEL</p>
+
             <h1>Order Management</h1>
+
             <span>
                 View customer orders and update delivery status.
             </span>
+
         </div>
 
-        <div class="admin-summary">
+        <!-- Order Summary -->
+
+        <section class="admin-summary">
+
             <div class="admin-summary-card">
-                <span>Total Orders</span>
-                <strong id="totalOrders">0</strong>
+
+                <span>
+                    Total Orders
+                </span>
+
+                <strong id="totalOrders">
+                    0
+                </strong>
+
             </div>
 
             <div class="admin-summary-card">
-                <span>Pending Orders</span>
-                <strong id="pendingOrders">0</strong>
+
+                <span>
+                    Pending Orders
+                </span>
+
+                <strong id="pendingOrders">
+                    0
+                </strong>
+
             </div>
 
             <div class="admin-summary-card">
-                <span>Delivered Orders</span>
-                <strong id="deliveredOrders">0</strong>
-            </div>
-        </div>
 
-        <div id="adminMessage" class="admin-message">
+                <span>
+                    Delivered Orders
+                </span>
+
+                <strong id="deliveredOrders">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+        <!-- Loading/Error Message -->
+
+        <div
+            id="adminMessage"
+            class="admin-message"
+            aria-live="polite"
+        >
             Loading orders...
         </div>
 
-        <div
+        <!-- Orders -->
+
+        <section
             id="adminOrdersContainer"
             class="admin-orders-container"
-        ></div>
+        ></section>
 
     </main>
 
-    <script src="js/admin-orders.js?v=6"></script>
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script src="js/admin-orders.js?v=7"></script>
+
+    <script src="js/navbar.js?v=6"></script>
 
 </body>
 
