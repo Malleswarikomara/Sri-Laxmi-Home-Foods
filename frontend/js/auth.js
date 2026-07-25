@@ -1,16 +1,29 @@
 const AUTH_API =
     "https://sri-laxmi-home-foods.onrender.com/api/auth";
 
-/* -------------------------------
+/* =========================================
    HELPER FUNCTIONS
--------------------------------- */
+========================================= */
 
-function getInputValue(form, selectors) {
+function getTextValue(form, selectors) {
     const input =
         form.querySelector(selectors);
 
     return input
-        ? input.value.trim()
+        ? String(input.value).trim()
+        : "";
+}
+
+/*
+   Password ni trim cheyyakudadhu.
+   User enter chesina exact value backend ki pampali.
+*/
+function getPasswordValue(form, selectors) {
+    const input =
+        form.querySelector(selectors);
+
+    return input
+        ? String(input.value)
         : "";
 }
 
@@ -48,6 +61,26 @@ function setButtonLoading(
             : defaultText;
 }
 
+function showFormMessage(
+    elementId,
+    message,
+    success = false
+) {
+    const messageElement =
+        document.getElementById(elementId);
+
+    if (!messageElement) {
+        return;
+    }
+
+    messageElement.textContent = message;
+
+    messageElement.style.color =
+        success
+            ? "green"
+            : "red";
+}
+
 function saveLoginData(data) {
     localStorage.setItem(
         "token",
@@ -70,9 +103,9 @@ function redirectAfterLogin(user) {
     }
 }
 
-/* -------------------------------
+/* =========================================
    REGISTER
--------------------------------- */
+========================================= */
 
 const registerForm =
     document.getElementById("registerForm");
@@ -80,37 +113,44 @@ const registerForm =
 if (registerForm) {
     registerForm.addEventListener(
         "submit",
-        async (event) => {
+        async function (event) {
             event.preventDefault();
 
-            const name = getInputValue(
-                registerForm,
-                "#name, #registerName, [name='name']"
-            );
+            const name =
+                getTextValue(
+                    registerForm,
+                    "#name, #registerName, [name='name']"
+                );
 
-            const email = getInputValue(
-                registerForm,
-                "#email, #registerEmail, [name='email']"
-            ).toLowerCase();
+            const email =
+                getTextValue(
+                    registerForm,
+                    "#email, #registerEmail, [name='email']"
+                ).toLowerCase();
 
-            const phone = getInputValue(
-                registerForm,
-                "#phone, #registerPhone, [name='phone']"
-            );
+            const phone =
+                getTextValue(
+                    registerForm,
+                    "#phone, #registerPhone, [name='phone']"
+                );
 
-            const password = getInputValue(
-                registerForm,
-                "#password, #registerPassword, [name='password']"
-            );
+            const password =
+                getPasswordValue(
+                    registerForm,
+                    "#password, #registerPassword, [name='password']"
+                );
 
             const confirmPassword =
-                getInputValue(
+                getPasswordValue(
                     registerForm,
                     "#confirmPassword, [name='confirmPassword']"
                 );
 
             if (!name) {
-                alert("Please enter your name.");
+                alert(
+                    "Please enter your name."
+                );
+
                 return;
             }
 
@@ -127,19 +167,18 @@ if (registerForm) {
             }
 
             if (
-                phone &&
                 !/^[6-9]\d{9}$/.test(phone)
             ) {
                 alert(
-                    "Please enter a valid 10-digit mobile number."
+                    "Please enter a valid Indian 10-digit mobile number."
                 );
 
                 return;
             }
 
-            if (password.length < 6) {
+            if (password.length < 8) {
                 alert(
-                    "Password must contain at least 6 characters."
+                    "Password must contain at least 8 characters."
                 );
 
                 return;
@@ -169,27 +208,31 @@ if (registerForm) {
             );
 
             try {
-                const response = await fetch(
-                    `${AUTH_API}/register`,
-                    {
-                        method: "POST",
+                const response =
+                    await fetch(
+                        `${AUTH_API}/register`,
+                        {
+                            method: "POST",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            phone,
-                            password
-                        })
-                    }
-                );
+                            body:
+                                JSON.stringify({
+                                    name,
+                                    email,
+                                    phone,
+                                    password
+                                })
+                        }
+                    );
 
                 const data =
-                    await readResponse(response);
+                    await readResponse(
+                        response
+                    );
 
                 if (
                     !response.ok ||
@@ -217,7 +260,10 @@ if (registerForm) {
                     error
                 );
 
-                alert(error.message);
+                alert(
+                    error.message ||
+                    "Registration failed."
+                );
 
             } finally {
                 setButtonLoading(
@@ -231,9 +277,9 @@ if (registerForm) {
     );
 }
 
-/* -------------------------------
+/* =========================================
    LOGIN
--------------------------------- */
+========================================= */
 
 const loginForm =
     document.getElementById("loginForm");
@@ -241,25 +287,33 @@ const loginForm =
 if (loginForm) {
     loginForm.addEventListener(
         "submit",
-        async (event) => {
+        async function (event) {
             event.preventDefault();
 
-            const email = getInputValue(
-                loginForm,
-                "#email, #loginEmail, [name='email']"
-            ).toLowerCase();
-
-            const password = getInputValue(
-                loginForm,
-                "#password, #loginPassword, [name='password']"
+            showFormMessage(
+                "loginMessage",
+                ""
             );
+
+            const email =
+                getTextValue(
+                    loginForm,
+                    "#email, #loginEmail, [name='email']"
+                ).toLowerCase();
+
+            const password =
+                getPasswordValue(
+                    loginForm,
+                    "#password, #loginPassword, [name='password']"
+                );
 
             if (
                 !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                     email
                 )
             ) {
-                alert(
+                showFormMessage(
+                    "loginMessage",
                     "Please enter a valid email address."
                 );
 
@@ -267,7 +321,8 @@ if (loginForm) {
             }
 
             if (!password) {
-                alert(
+                showFormMessage(
+                    "loginMessage",
                     "Please enter your password."
                 );
 
@@ -287,25 +342,29 @@ if (loginForm) {
             );
 
             try {
-                const response = await fetch(
-                    `${AUTH_API}/login`,
-                    {
-                        method: "POST",
+                const response =
+                    await fetch(
+                        `${AUTH_API}/login`,
+                        {
+                            method: "POST",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                        body: JSON.stringify({
-                            email,
-                            password
-                        })
-                    }
-                );
+                            body:
+                                JSON.stringify({
+                                    email,
+                                    password
+                                })
+                        }
+                    );
 
                 const data =
-                    await readResponse(response);
+                    await readResponse(
+                        response
+                    );
 
                 if (
                     !response.ok ||
@@ -328,9 +387,20 @@ if (loginForm) {
 
                 saveLoginData(data);
 
-                alert("Login successful!");
+                showFormMessage(
+                    "loginMessage",
+                    "Login successful!",
+                    true
+                );
 
-                redirectAfterLogin(data.user);
+                setTimeout(
+                    function () {
+                        redirectAfterLogin(
+                            data.user
+                        );
+                    },
+                    800
+                );
 
             } catch (error) {
                 console.error(
@@ -338,7 +408,11 @@ if (loginForm) {
                     error
                 );
 
-                alert(error.message);
+                showFormMessage(
+                    "loginMessage",
+                    error.message ||
+                    "Invalid email or password."
+                );
 
             } finally {
                 setButtonLoading(
@@ -352,16 +426,18 @@ if (loginForm) {
     );
 }
 
-/* -------------------------------
+/* =========================================
    LOGOUT
--------------------------------- */
+========================================= */
 
 function logoutUser() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("lastOrder");
 
-    alert("Logged out successfully.");
+    alert(
+        "Logged out successfully."
+    );
 
     window.location.href =
         "login.html";
