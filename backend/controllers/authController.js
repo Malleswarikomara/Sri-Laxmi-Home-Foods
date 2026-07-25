@@ -94,7 +94,8 @@ async function sendBrevoEmail({
         }
     );
 
-    const responseText = await response.text();
+    const responseText =
+        await response.text();
 
     let responseData = {};
 
@@ -173,7 +174,9 @@ const registerUser = async (req, res) => {
             });
         }
 
-        if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        if (
+            !/^[6-9]\d{9}$/.test(cleanPhone)
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -181,7 +184,9 @@ const registerUser = async (req, res) => {
             });
         }
 
-        if (String(password).length < 8) {
+        if (
+            String(password).length < 8
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -279,6 +284,15 @@ const loginUser = async (req, res) => {
                 email: cleanEmail
             });
 
+        /*
+           Debug log 1:
+           MongoDB lo user dorikada leda check chestundi.
+        */
+        console.log(
+            "Login debug - user found:",
+            Boolean(user)
+        );
+
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -287,11 +301,35 @@ const loginUser = async (req, res) => {
             });
         }
 
+        /*
+           Debug log 2:
+           Stored password bcrypt hash format lo unda
+           ani check chestundi.
+        */
+        const storedPasswordIsHash =
+            String(user.password)
+                .startsWith("$2");
+
+        console.log(
+            "Login debug - stored password is bcrypt hash:",
+            storedPasswordIsHash
+        );
+
         const isPasswordCorrect =
             await bcrypt.compare(
                 String(password),
-                user.password
+                String(user.password)
             );
+
+        /*
+           Debug log 3:
+           Enter chesina password database hash tho
+           match ayyinda leda check chestundi.
+        */
+        console.log(
+            "Login debug - password matched:",
+            isPasswordCorrect
+        );
 
         if (!isPasswordCorrect) {
             return res.status(400).json({
@@ -354,11 +392,13 @@ const forgotPassword = async (req, res) => {
         }
 
         const user =
-            await User.findOne({ email });
+            await User.findOne({
+                email
+            });
 
         /*
-            User account exists aina,
-            exist kakapoyina same message return chestham.
+           User account exists aina,
+           exist kakapoyina same message.
         */
 
         const safeResponseMessage =
@@ -372,18 +412,10 @@ const forgotPassword = async (req, res) => {
             });
         }
 
-        /*
-            Raw reset token email link lo untundi.
-        */
-
         const resetToken =
             crypto
                 .randomBytes(32)
                 .toString("hex");
-
-        /*
-            Database lo hashed token store chestham.
-        */
 
         const hashedResetToken =
             crypto
@@ -393,10 +425,6 @@ const forgotPassword = async (req, res) => {
 
         user.resetPasswordToken =
             hashedResetToken;
-
-        /*
-            Reset link 15 minutes valid.
-        */
 
         user.resetPasswordExpire =
             Date.now() +
@@ -490,15 +518,13 @@ Sri Laxmi Home Foods`,
                         </p>
 
                         <p>
-                            This password reset link is
-                            valid for
+                            This password reset link is valid for
                             <strong>15 minutes</strong>.
                         </p>
 
                         <p>
-                            If you did not request this
-                            password reset, you can safely
-                            ignore this email.
+                            If you did not request this password
+                            reset, you can safely ignore this email.
                         </p>
 
                         <hr style="
@@ -519,7 +545,7 @@ Sri Laxmi Home Foods`,
             });
 
             console.log(
-                `Password reset email sent to ${user.email}`
+                "Password reset email sent successfully."
             );
 
             return res.status(200).json({
@@ -590,7 +616,9 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        if (String(password).length < 8) {
+        if (
+            String(password).length < 8
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -633,16 +661,52 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        user.password =
+        /*
+           New password hash create chestundi.
+        */
+        const newHashedPassword =
             await bcrypt.hash(
                 String(password),
                 10
             );
 
+        user.password =
+            newHashedPassword;
+
         user.resetPasswordToken = null;
         user.resetPasswordExpire = null;
 
         await user.save();
+
+        /*
+           MongoDB nundi user ni malli fetch chesi,
+           password correct ga save ayyinda check chestundi.
+        */
+        const updatedUser =
+            await User.findById(
+                user._id
+            );
+
+        const passwordSavedCorrectly =
+            updatedUser
+                ? await bcrypt.compare(
+                    String(password),
+                    String(updatedUser.password)
+                )
+                : false;
+
+        console.log(
+            "Reset debug - password saved correctly:",
+            passwordSavedCorrectly
+        );
+
+        if (!passwordSavedCorrectly) {
+            return res.status(500).json({
+                success: false,
+                message:
+                    "Password could not be saved correctly. Please try again."
+            });
+        }
 
         return res.status(200).json({
             success: true,
