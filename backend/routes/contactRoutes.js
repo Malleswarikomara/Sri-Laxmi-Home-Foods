@@ -14,15 +14,21 @@ const {
     updateContactStatus
 } = require("../controllers/contactController");
 
-/* Public route */
+/* =========================================
+   PUBLIC ROUTE
+========================================= */
 
+// Customer/contact visitor message submit
 router.post(
     "/",
     createContactMessage
 );
 
-/* Admin routes */
+/* =========================================
+   ADMIN ROUTES
+========================================= */
 
+// View all customer messages
 router.get(
     "/",
     protect,
@@ -30,21 +36,7 @@ router.get(
     getContactMessages
 );
 
-router.patch(
-    "/:id/status",
-    protect,
-    adminOnly,
-    updateContactStatus
-);
-router.post("/", createContactMessage);
-
-router.get(
-    "/",
-    protect,
-    adminOnly,
-    getContactMessages
-);
-
+// Update message status
 router.patch(
     "/:id/status",
     protect,
