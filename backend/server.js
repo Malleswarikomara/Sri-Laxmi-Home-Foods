@@ -3,12 +3,23 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 
+const {
+    rateLimit
+} = require("express-rate-limit");
+
 const connectDB = require("./config/db");
 
-const authRoutes = require("./routes/authRoutes");
-const foodRoutes = require("./routes/foodRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const contactRoutes = require("./routes/contactRoutes");
+const authRoutes =
+    require("./routes/authRoutes");
+
+const foodRoutes =
+    require("./routes/foodRoutes");
+
+const orderRoutes =
+    require("./routes/orderRoutes");
+
+const contactRoutes =
+    require("./routes/contactRoutes");
 
 /* =========================================
    ENVIRONMENT CONFIGURATION
@@ -32,7 +43,21 @@ const app = express();
    Express technology information ni
    response headers lo hide chestundi.
 */
+
 app.disable("x-powered-by");
+
+/*
+   Render reverse proxy venuka application
+   run avutundi.
+
+   Correct customer IP address ni Express
+   identify cheyyadaniki production lo
+   one proxy hop trust chestunnam.
+*/
+
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+}
 
 /* =========================================
    CORS CONFIGURATION
@@ -51,6 +76,7 @@ const allowedOrigins = new Set([
     /*
        Local Live Server URLs
     */
+
     "http://127.0.0.1:5500",
     "http://localhost:5500"
 ]);
@@ -62,6 +88,7 @@ const corsOptions = {
            server-to-server requests sometimes
            Origin header pampinchavu.
         */
+
         if (!origin) {
             return callback(
                 null,
@@ -93,9 +120,7 @@ const corsOptions = {
         corsError.code =
             "CORS_NOT_ALLOWED";
 
-        return callback(
-            corsError
-        );
+        return callback(corsError);
     },
 
     methods: [
@@ -139,6 +164,101 @@ app.use(
 );
 
 /* =========================================
+   RATE LIMITERS
+========================================= */
+
+/*
+   General API limiter:
+
+   One IP address nunchi
+   15 minutes lo maximum 300 API requests.
+*/
+
+const apiLimiter = rateLimit({
+    windowMs:
+        15 * 60 * 1000,
+
+    limit: 300,
+
+    standardHeaders:
+        "draft-8",
+
+    legacyHeaders:
+        false,
+
+    message: {
+        success: false,
+        message:
+            "Too many requests. Please wait for a few minutes and try again."
+    }
+});
+
+/*
+   Authentication limiter:
+
+   Login, register, forgot password and
+   reset password routes kosam stricter limit.
+
+   One IP address nunchi
+   15 minutes lo maximum 30 attempts.
+*/
+
+const authLimiter = rateLimit({
+    windowMs:
+        15 * 60 * 1000,
+
+    limit: 30,
+
+    standardHeaders:
+        "draft-8",
+
+    legacyHeaders:
+        false,
+
+    message: {
+        success: false,
+        message:
+            "Too many authentication attempts. Please wait for 15 minutes and try again."
+    }
+});
+
+/*
+   Contact form limiter:
+
+   One IP address nunchi
+   one hour lo maximum 5 messages.
+*/
+
+const contactLimiter = rateLimit({
+    windowMs:
+        60 * 60 * 1000,
+
+    limit: 5,
+
+    standardHeaders:
+        "draft-8",
+
+    legacyHeaders:
+        false,
+
+    message: {
+        success: false,
+        message:
+            "Too many messages submitted. Please try again later."
+    }
+});
+
+/*
+   General limiter ni anni API routes ki
+   apply chestunnam.
+*/
+
+app.use(
+    "/api",
+    apiLimiter
+);
+
+/* =========================================
    STATIC FILES
 ========================================= */
 
@@ -146,6 +266,7 @@ app.use(
    Old/local uploaded food images kosam.
    Cloudinary images direct URLs tho load avutayi.
 */
+
 app.use(
     "/uploads",
     express.static(
@@ -163,6 +284,7 @@ app.use(
 app.get("/", (req, res) => {
     return res.status(200).json({
         success: true,
+
         message:
             "Sri Laxmi Home Foods API is running",
 
@@ -176,8 +298,14 @@ app.get("/", (req, res) => {
    API ROUTES
 ========================================= */
 
+/*
+   Authentication routes ki
+   additional strict limiter.
+*/
+
 app.use(
     "/api/auth",
+    authLimiter,
     authRoutes
 );
 
@@ -189,6 +317,19 @@ app.use(
 app.use(
     "/api/orders",
     orderRoutes
+);
+
+/*
+   Contact POST request ki matrame
+   contact spam limiter apply avutundi.
+
+   Admin GET and PATCH requests ki
+   contactLimiter apply avvadu.
+*/
+
+app.post(
+    "/api/contact",
+    contactLimiter
 );
 
 app.use(
@@ -225,6 +366,7 @@ app.use(
         ) {
             return res.status(403).json({
                 success: false,
+
                 message:
                     "This website is not allowed to access the API."
             });
