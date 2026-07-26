@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
+const helmet = require("helmet");
 
 const {
     rateLimit
@@ -45,6 +46,26 @@ const app = express();
 */
 
 app.disable("x-powered-by");
+/*
+   Security response headers.
+
+   Frontend Netlify lo, backend Render lo
+   different origins kabatti uploaded images
+   cross-origin ga load avvadaniki allow chestunnam.
+
+   Backend mostly JSON API responses istundi kabatti
+   document-specific CSP disable chestunnam.
+*/
+
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+
+        crossOriginResourcePolicy: {
+            policy: "cross-origin"
+        }
+    })
+);
 
 /*
    Render reverse proxy venuka application
