@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Contact = require("../models/ContactModel");
 
 /* =========================================
-   CREATE CONTACT MESSAGE
+   CREATE CONTACT MESSAGE — PUBLIC
 ========================================= */
 
 const createContactMessage = async (req, res) => {
@@ -13,9 +13,40 @@ const createContactMessage = async (req, res) => {
             phone,
             subject,
             message
-        } = req.body;
+        } = req.body || {};
 
-        if (!name || !email || !phone || !message) {
+        const cleanName =
+            String(name || "").trim();
+
+        const cleanEmail =
+            String(email || "")
+                .trim()
+                .toLowerCase();
+
+        const cleanPhone =
+            String(phone || "").trim();
+
+        const phoneDigits =
+            cleanPhone.replace(/\D/g, "");
+
+        const cleanSubject =
+            String(
+                subject || "General Enquiry"
+            ).trim();
+
+        const cleanMessage =
+            String(message || "").trim();
+
+        /* =====================================
+           REQUIRED FIELD VALIDATION
+        ===================================== */
+
+        if (
+            !cleanName ||
+            !cleanEmail ||
+            !cleanPhone ||
+            !cleanMessage
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -23,10 +54,32 @@ const createContactMessage = async (req, res) => {
             });
         }
 
+        /* =====================================
+           NAME VALIDATION
+        ===================================== */
+
+        if (
+            cleanName.length < 2 ||
+            cleanName.length > 80
+        ) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Name must contain between 2 and 80 characters."
+            });
+        }
+
+        /* =====================================
+           EMAIL VALIDATION
+        ===================================== */
+
         const emailPattern =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!emailPattern.test(email.trim())) {
+        if (
+            !emailPattern.test(cleanEmail) ||
+            cleanEmail.length > 120
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -34,8 +87,9 @@ const createContactMessage = async (req, res) => {
             });
         }
 
-        const phoneDigits =
-            String(phone).replace(/\D/g, "");
+        /* =====================================
+           PHONE VALIDATION
+        ===================================== */
 
         if (
             phoneDigits.length < 10 ||
@@ -48,13 +102,51 @@ const createContactMessage = async (req, res) => {
             });
         }
 
+        /* =====================================
+           SUBJECT VALIDATION
+        ===================================== */
+
+        if (cleanSubject.length > 150) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Subject must not exceed 150 characters."
+            });
+        }
+
+        /* =====================================
+           MESSAGE VALIDATION
+        ===================================== */
+
+        if (cleanMessage.length < 5) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Message must contain at least 5 characters."
+            });
+        }
+
+        if (cleanMessage.length > 2000) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Message must not exceed 2000 characters."
+            });
+        }
+
+        /* =====================================
+           CREATE CONTACT MESSAGE
+        ===================================== */
+
         const contact = await Contact.create({
-            name: name.trim(),
-            email: email.trim().toLowerCase(),
-            phone: phone.trim(),
+            name: cleanName,
+            email: cleanEmail,
+            phone: phoneDigits,
             subject:
-                subject?.trim() || "General Enquiry",
-            message: message.trim()
+                cleanSubject ||
+                "General Enquiry",
+            message: cleanMessage,
+            status: "New"
         });
 
         return res.status(201).json({
@@ -72,7 +164,7 @@ const createContactMessage = async (req, res) => {
         return res.status(500).json({
             success: false,
             message:
-                "Unable to submit your message."
+                "Unable to submit your message. Please try again."
         });
     }
 };
@@ -81,10 +173,16 @@ const createContactMessage = async (req, res) => {
    GET ALL CONTACT MESSAGES — ADMIN
 ========================================= */
 
-const getContactMessages = async (req, res) => {
+const getContactMessages = async (
+    req,
+    res
+) => {
     try {
-        const contacts = await Contact.find()
-            .sort({ createdAt: -1 });
+        const contacts =
+            await Contact.find()
+                .sort({
+                    createdAt: -1
+                });
 
         return res.status(200).json({
             success: true,
@@ -109,15 +207,27 @@ const getContactMessages = async (req, res) => {
    UPDATE CONTACT STATUS — ADMIN
 ========================================= */
 
-const updateContactStatus = async (req, res) => {
+const updateContactStatus = async (
+    req,
+    res
+) => {
     try {
         const { id } = req.params;
-        const { status } = req.body;
 
-        if (!mongoose.isValidObjectId(id)) {
+        const status =
+            String(
+                req.body?.status || ""
+            ).trim();
+
+        if (
+            !mongoose.Types.ObjectId.isValid(
+                id
+            )
+        ) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid contact message ID."
+                message:
+                    "Invalid contact message ID."
             });
         }
 
@@ -127,7 +237,9 @@ const updateContactStatus = async (req, res) => {
             "Replied"
         ];
 
-        if (!allowedStatuses.includes(status)) {
+        if (
+            !allowedStatuses.includes(status)
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -135,14 +247,19 @@ const updateContactStatus = async (req, res) => {
             });
         }
 
-        const contact = await Contact.findByIdAndUpdate(
-            id,
-            { status },
-            {
-                new: true,
-                runValidators: true
-            }
-        );
+        const contact =
+            await Contact.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        status
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
 
         if (!contact) {
             return res.status(404).json({
@@ -171,6 +288,10 @@ const updateContactStatus = async (req, res) => {
         });
     }
 };
+
+/* =========================================
+   EXPORT CONTROLLERS
+========================================= */
 
 module.exports = {
     createContactMessage,
