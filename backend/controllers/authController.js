@@ -53,13 +53,13 @@ async function sendBrevoEmail({
 
     if (!apiKey) {
         throw new Error(
-            "BREVO_API_KEY is missing in Render Environment Variables."
+            "BREVO_API_KEY is missing in environment variables."
         );
     }
 
     if (!senderEmail) {
         throw new Error(
-            "BREVO_SENDER_EMAIL is missing in Render Environment Variables."
+            "BREVO_SENDER_EMAIL is missing in environment variables."
         );
     }
 
@@ -100,9 +100,10 @@ async function sendBrevoEmail({
     let responseData = {};
 
     try {
-        responseData = responseText
-            ? JSON.parse(responseText)
-            : {};
+        responseData =
+            responseText
+                ? JSON.parse(responseText)
+                : {};
     } catch (error) {
         responseData = {};
     }
@@ -131,7 +132,7 @@ const registerUser = async (req, res) => {
             email,
             phone,
             password
-        } = req.body;
+        } = req.body || {};
 
         if (
             !name ||
@@ -153,7 +154,8 @@ const registerUser = async (req, res) => {
             normalizeEmail(email);
 
         const cleanPhone =
-            String(phone).replace(/\D/g, "");
+            String(phone)
+                .replace(/\D/g, "");
 
         if (cleanName.length < 2) {
             return res.status(400).json({
@@ -166,7 +168,11 @@ const registerUser = async (req, res) => {
         const emailPattern =
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!emailPattern.test(cleanEmail)) {
+        if (
+            !emailPattern.test(
+                cleanEmail
+            )
+        ) {
             return res.status(400).json({
                 success: false,
                 message:
@@ -175,7 +181,9 @@ const registerUser = async (req, res) => {
         }
 
         if (
-            !/^[6-9]\d{9}$/.test(cleanPhone)
+            !/^[6-9]\d{9}$/.test(
+                cleanPhone
+            )
         ) {
             return res.status(400).json({
                 success: false,
@@ -266,7 +274,7 @@ const loginUser = async (req, res) => {
         const {
             email,
             password
-        } = req.body;
+        } = req.body || {};
 
         if (!email || !password) {
             return res.status(400).json({
@@ -284,15 +292,6 @@ const loginUser = async (req, res) => {
                 email: cleanEmail
             });
 
-        /*
-           Debug log 1:
-           MongoDB lo user dorikada leda check chestundi.
-        */
-        console.log(
-            "Login debug - user found:",
-            Boolean(user)
-        );
-
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -301,35 +300,11 @@ const loginUser = async (req, res) => {
             });
         }
 
-        /*
-           Debug log 2:
-           Stored password bcrypt hash format lo unda
-           ani check chestundi.
-        */
-        const storedPasswordIsHash =
-            String(user.password)
-                .startsWith("$2");
-
-        console.log(
-            "Login debug - stored password is bcrypt hash:",
-            storedPasswordIsHash
-        );
-
         const isPasswordCorrect =
             await bcrypt.compare(
                 String(password),
                 String(user.password)
             );
-
-        /*
-           Debug log 3:
-           Enter chesina password database hash tho
-           match ayyinda leda check chestundi.
-        */
-        console.log(
-            "Login debug - password matched:",
-            isPasswordCorrect
-        );
 
         if (!isPasswordCorrect) {
             return res.status(400).json({
@@ -376,11 +351,18 @@ const loginUser = async (req, res) => {
    FORGOT PASSWORD
 ========================================= */
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (
+    req,
+    res
+) => {
     try {
+        const {
+            email: requestedEmail
+        } = req.body || {};
+
         const email =
             normalizeEmail(
-                req.body?.email
+                requestedEmail
             );
 
         if (!email) {
@@ -391,18 +373,18 @@ const forgotPassword = async (req, res) => {
             });
         }
 
+        const safeResponseMessage =
+            "If an account exists with this email, a password reset link will be sent.";
+
         const user =
             await User.findOne({
                 email
             });
 
         /*
-           User account exists aina,
-           exist kakapoyina same message.
+           User exist aina, exist kakapoyina
+           same response pampistham.
         */
-
-        const safeResponseMessage =
-            "If an account exists with this email, a password reset link will be sent.";
 
         if (!user) {
             return res.status(200).json({
@@ -433,7 +415,7 @@ const forgotPassword = async (req, res) => {
         await user.save();
 
         const frontendURL =
-            (
+            String(
                 process.env.FRONTEND_URL ||
                 "http://127.0.0.1:5500/frontend"
             ).replace(/\/$/, "");
@@ -544,10 +526,6 @@ Sri Laxmi Home Foods`,
                 `
             });
 
-            console.log(
-                "Password reset email sent successfully."
-            );
-
             return res.status(200).json({
                 success: true,
                 message:
@@ -590,15 +568,20 @@ Sri Laxmi Home Foods`,
    RESET PASSWORD
 ========================================= */
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (
+    req,
+    res
+) => {
     try {
         const resetToken =
-            req.params.token;
+            String(
+                req.params?.token || ""
+            ).trim();
 
         const {
             password,
             confirmPassword
-        } = req.body;
+        } = req.body || {};
 
         if (!resetToken) {
             return res.status(400).json({
@@ -661,9 +644,6 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        /*
-           New password hash create chestundi.
-        */
         const newHashedPassword =
             await bcrypt.hash(
                 String(password),
@@ -677,36 +657,6 @@ const resetPassword = async (req, res) => {
         user.resetPasswordExpire = null;
 
         await user.save();
-
-        /*
-           MongoDB nundi user ni malli fetch chesi,
-           password correct ga save ayyinda check chestundi.
-        */
-        const updatedUser =
-            await User.findById(
-                user._id
-            );
-
-        const passwordSavedCorrectly =
-            updatedUser
-                ? await bcrypt.compare(
-                    String(password),
-                    String(updatedUser.password)
-                )
-                : false;
-
-        console.log(
-            "Reset debug - password saved correctly:",
-            passwordSavedCorrectly
-        );
-
-        if (!passwordSavedCorrectly) {
-            return res.status(500).json({
-                success: false,
-                message:
-                    "Password could not be saved correctly. Please try again."
-            });
-        }
 
         return res.status(200).json({
             success: true,
